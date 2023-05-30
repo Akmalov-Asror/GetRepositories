@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+    
+  gitclonebackend:
+    image: gitclonebackend
+    depends_on:
+      - data_db
+    container_name: gitclonebackend
+    ports: 
+      - "1001:80"
+    build:
+      context: GitCloneBackend
+      dockerfile: Dockerfile
+    networks:
+      - dev
+
+  gitclonefrontend:
+    image: gitclonefrontend
+    container_name: gitclonefrontend
+    ports:
+      - "2001:80"
+    build:
+      context: GitCloneFrontend
+      dockerfile: Dockerfile
+
+  data_db:
+    image: postgres:latest
+    container_name: data_db
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    restart: always
+    networks:
+      - dev
+
+networks:
+  dev:
+    driver: bridge 
+
+volumes:
+  customer_data:
+  pgadmin:
