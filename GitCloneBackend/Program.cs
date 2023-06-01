@@ -25,8 +25,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddHostedService<ProjectFetcherService>();
-builder.Services.AddScoped<ProjectFetcherService>();
-
+builder.Services.AddSingleton<ProjectFetcherService>();
 builder.Services.AddCors(cors =>
 {
     cors.AddDefaultPolicy(policy =>
@@ -46,8 +45,8 @@ app.UseSwaggerUI();
 {
     var db = app.Services.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
-}
-*/
+}*/
+
 app.UseHttpsRedirection();
 
 app.UseCors();

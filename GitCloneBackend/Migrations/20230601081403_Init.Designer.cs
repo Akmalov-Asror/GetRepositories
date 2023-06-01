@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GitCloneBackend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230530203203_Init")]
+    [Migration("20230601081403_Init")]
     partial class Init
     {
         /// <inheritdoc />
