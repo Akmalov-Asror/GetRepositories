@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen();
 
 builder.ConfigureServices();
 
-builder.Services.AddScoped<GitHubClient>(provider =>
+builder.Services.AddSingleton<GitHubClient>(provider =>
 {
     var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
     var client = new GitHubClient(new ProductHeaderValue("Auto.Test.Bot"));
@@ -25,6 +25,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddHostedService<ProjectFetcherService>();
+builder.Services.AddScoped<ProjectFetcherService>();
+
 builder.Services.AddCors(cors =>
 {
     cors.AddDefaultPolicy(policy =>
@@ -40,12 +42,12 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-if (app.Services.GetService<AppDbContext>() != null)
+/*if (app.Services.GetService<AppDbContext>() != null)
 {
     var db = app.Services.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
 }
-
+*/
 app.UseHttpsRedirection();
 
 app.UseCors();

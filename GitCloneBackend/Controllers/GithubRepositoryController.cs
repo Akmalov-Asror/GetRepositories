@@ -1,7 +1,10 @@
 ﻿using GitCloneBackend.Data;
+using GitCloneBackend.DTO_s;
 using GitCloneBackend.Repositories;
+using GitCloneBackend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Octokit;
 
 namespace GitCloneBackend.Controllers;
 
@@ -10,11 +13,11 @@ namespace GitCloneBackend.Controllers;
 public class GithubRepositoryController : ControllerBase
 {
     private readonly AppDbContext _context;
-    private readonly RepositoryFetcher _repositoryFetcher;
-    public GithubRepositoryController(AppDbContext context, RepositoryFetcher repositoryFetcher)
+    private readonly ProjectFetcherService _repositoryService;
+    public GithubRepositoryController(AppDbContext context, ProjectFetcherService repositoryService)
     {
         _context = context;
-        _repositoryFetcher = repositoryFetcher;
+        _repositoryService = repositoryService;
     }
 
     [HttpGet("gitRepositories")]
@@ -23,6 +26,16 @@ public class GithubRepositoryController : ControllerBase
         var users = await _context.Repositories.ToListAsync();
         
         return Ok(users);
+    }
+
+
+
+
+
+    [HttpPost]
+    public async Task<IReadOnlyList<Repository>> GetRepositories([FromBody] UserDto user)
+    {
+        return await _repositoryService.GetRepositories(user.Username);
     }
 
 }
